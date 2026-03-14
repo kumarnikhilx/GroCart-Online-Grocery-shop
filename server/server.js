@@ -14,7 +14,7 @@ import errorHandler from "./middlewares/errorMiddleware.js";
 import { PORT } from "./config/index.js";
 
 const app = express();
-const port = PORT || 10000;
+const port = process.env.PORT;
 
 await connectDB();
 await connectCloudinary();
