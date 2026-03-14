@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticate } from "./../middlewares/authMiddleware.js";
+import { authenticate, softAuthenticate } from "./../middlewares/authMiddleware.js";
 import {
     registerUser,
     loginUser,
@@ -15,7 +15,7 @@ const userRouter = Router();
 userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 userRouter.delete("/logout", logoutUser);
-userRouter.get("/me", authenticate, getCurrentUser);
+userRouter.get("/me", softAuthenticate, getCurrentUser);
 userRouter.post("/forgot-password", forgotPassword);
 userRouter.post("/verify-otp", verifyOtp);
 userRouter.post("/reset-password", resetPassword);

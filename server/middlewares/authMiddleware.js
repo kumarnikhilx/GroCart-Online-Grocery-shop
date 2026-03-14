@@ -43,6 +43,38 @@ export const authenticate = asyncHandler(async (req, res, next) => {
     next();
 });
 
+export const softAuthenticate = asyncHandler(async (req, res, next) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        req.user = null;
+        return next();
+    }
+
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, JWT_SECRET);
+    } catch (err) {
+        req.user = null;
+        return next();
+    }
+
+    if (decodedToken.id === "seller_env_account") {
+        req.user = {
+            _id: "seller_env_account",
+            role: "seller",
+            email: process.env.SELLER_EMAIL,
+            name: "Admin Seller",
+        };
+        return next();
+    }
+
+    const user = await User.findById(decodedToken.id).select("-password");
+    req.user = user || null;
+
+    next();
+});
+
 export const authorize = asyncHandler(async (req, res, next) => {
     if (!req.user) {
         return next(new CustomError(401, "Not authenticated"));

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticate, authorize } from "./../middlewares/authMiddleware.js";
+import { authenticate, authorize, softAuthenticate } from "./../middlewares/authMiddleware.js";
 import {
     sellerLogin,
     sellerLogout,
@@ -10,7 +10,6 @@ const authSellerRouter = Router();
 
 authSellerRouter.post("/login", sellerLogin);
 authSellerRouter.post("/logout", sellerLogout);
-// Ensure both authenticated AND authorized (role: seller)
-authSellerRouter.get("/me", authenticate, authorize, getCurrentSeller);
+authSellerRouter.get("/me", softAuthenticate, getCurrentSeller);
 
 export default authSellerRouter;

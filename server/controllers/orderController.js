@@ -186,6 +186,8 @@ export const getAllOrders = asyncHandler(async (req, res, next) => {
         .populate("items.product address")
         .sort({ createdAt: -1 });
 
+    console.log("Seller API /api/order/seller invoked. Found total valid orders:", orders ? orders.length : 0);
+
     if (!orders) {
         return next(new CustomError(404, "Orders not found"));
     }

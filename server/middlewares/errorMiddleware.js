@@ -11,12 +11,21 @@ const errorHandler = async (err, req, res, next) => {
             ? "Internal Server Error"
             : err.message;
 
-    logger.error(`${err.message}`, {
-        name: err.name,
-        method: req.method,
-        path: req.originalUrl,
-        statusCode,
-    });
+    if (statusCode === 401) {
+        logger.info(`${err.message}`, {
+            name: err.name,
+            method: req.method,
+            path: req.originalUrl,
+            statusCode,
+        });
+    } else {
+        logger.error(`${err.message}`, {
+            name: err.name,
+            method: req.method,
+            path: req.originalUrl,
+            statusCode,
+        });
+    }
 
     return res.status(statusCode).json({
         success: false,

@@ -6,27 +6,42 @@ import {
     SELLER_EMAIL,
     SELLER_PASSWORD,
 } from "../config/index.js";
+import User from "../models/User.js";
 
 //! Login Seller via ENV : /api/seller/login
 
 export const sellerLogin = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
 
-    if (email === SELLER_EMAIL && password === SELLER_PASSWORD) {
-        // "seller_env_account" is a mock ID to recognize in auth middleware
-        const token = await genToken("seller_env_account");
+    // Check DB first
+    let user = await User.findOne({ email, role: "seller" });
+    let isMatch = false;
+    let sellerId = null;
+
+    if (user) {
+        isMatch = await user.comparePassword(password);
+        sellerId = user._id;
+    } else if (email === SELLER_EMAIL && password === SELLER_PASSWORD) {
+        // Fallback to ENV vars
+        isMatch = true;
+        sellerId = "seller_env_account";
+        user = { email: SELLER_EMAIL, name: "Admin Seller", role: "seller" };
+    }
+
+    if (isMatch) {
+        const token = await genToken(sellerId);
 
         res.cookie("token", token, {
             httpOnly: true,
             secure: NODE_ENV === "production",
-            sameSite: NODE_ENV === "production" ? "none" : "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expiration time
+            sameSite: NODE_ENV === "production" ? "none" : "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
         res.status(200).json({
             success: true,
             message: "Seller logged in securely",
-            user: { email: SELLER_EMAIL, name: "Admin Seller", role: "seller" },
+            user: { email: user.email, name: user.name, role: "seller" },
         });
     } else {
         return next(new CustomError(401, "Invalid seller credentials"));
