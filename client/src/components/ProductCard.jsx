@@ -17,9 +17,9 @@ const ProductCard = ({ product }) => {
                 }}
                 className="group border border-gray-100/50 rounded-3xl px-4 py-4 bg-white/70 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg cursor-pointer"
             >
-                <div className="group cursor-pointer flex items-center justify-center px-2">
+                <div className="group cursor-pointer flex items-center justify-center w-full h-40 sm:h-48 md:h-52 mb-3 overflow-hidden">
                     <img
-                        className="group-hover:scale-105 transition max-w-full h-auto"
+                        className="group-hover:scale-105 transition w-full h-full object-contain"
                         src={product.image[0]}
                         alt={product.name}
                     />

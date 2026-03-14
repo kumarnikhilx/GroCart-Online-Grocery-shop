@@ -10,6 +10,11 @@
 }
 
 @theme {
-    --color-primary: #4fbf8b;
-    --color-primary-dull: #44ae7c;
+    /* Soft deep violet base for the primary elements */
+    --color-primary: #8a4bff; /* Vibrant purple */
+    --color-primary-dull: #7232e0; /* Slightly darker */
+    /* Define some nice soft pastels for our custom background blobs */
+    --color-blob-pink: #fbcfe8;
+    --color-blob-purple: #e9d5ff;
+    --color-blob-orange: #ffedd5;
 }

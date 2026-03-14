@@ -5,12 +5,12 @@ import morgan from "morgan";
 import connectDB from "./config/db.js";
 import connectCloudinary from "./config/cloudinary.js";
 import userRouter from "./routes/userRoute.js";
+import authSellerRouter from "./routes/authSellerRoute.js";
 import productRouter from "./routes/productRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import addressRouter from "./routes/addressRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import errorHandler from "./middlewares/errorMiddleware.js";
-import { stripeWebhooks } from "./controllers/orderController.js";
 import { PORT } from "./config/index.js";
 
 const app = express();
@@ -20,9 +20,7 @@ await connectDB();
 await connectCloudinary();
 
 // Allow multiple origins
-const allowedOrigins = ["https://greencart-8d9l.onrender.com"];
-
-app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
+const allowedOrigins = process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : ["http://localhost:5173", "http://localhost:3000"];
 
 // Middlewares
 app.use(morgan("dev"));
@@ -32,6 +30,7 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.get("/", (req, res) => res.send("API is Working"));
 app.use("/api/user", userRouter);
+app.use("/api/seller", authSellerRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
@@ -41,6 +40,6 @@ app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(
-        `Server running on https://greencart-backend-9axs.onrender.com`
+        `Server running on port ${port} `
     );
 });

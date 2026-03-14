@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema(
             default: "user",
         },
         cartItems: { type: Object, default: {} },
+        resetPasswordOTP: { type: String, default: null },
+        resetPasswordOTPExpiry: { type: Date, default: null },
     },
     { minimize: false, timestamps: true }
 );

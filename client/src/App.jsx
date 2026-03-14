@@ -27,9 +27,16 @@ const App = () => {
     const { showUserLogin, seller } = useAppContext();
 
     return (
-        <div className="text-default min-h-screen text-gray-700 bg-white">
-            {isSellerPath ? null : <Navbar />}
-            {showUserLogin ? <Login /> : null}
+        <div className="text-default min-h-screen text-gray-800 bg-[#fbf9ff] relative overflow-hidden">
+            {/* Soft, beautiful multi-colored background blobs matching the reference image */}
+            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blob-purple rounded-full mix-blend-multiply opacity-60 filter blur-[120px] animate-pulse pointer-events-none"></div>
+            <div className="absolute top-[20%] right-[-5%] w-[30rem] h-[30rem] bg-blob-pink rounded-full mix-blend-multiply opacity-50 filter blur-[140px] animate-pulse pointer-events-none" style={{animationDelay: "2s"}}></div>
+            <div className="absolute bottom-[-10%] left-[20%] w-[35rem] h-[35rem] bg-blob-orange rounded-full mix-blend-multiply opacity-50 filter blur-[160px] animate-pulse pointer-events-none" style={{animationDelay: "4s"}}></div>
+            <div className="absolute top-[60%] right-[15%] w-80 h-80 bg-blob-purple rounded-full mix-blend-multiply opacity-40 filter blur-[100px] animate-pulse pointer-events-none"></div>
+
+            <div className="relative z-10 w-full min-h-screen flex flex-col pt-4"> {/* Added padding top so navbar can float */}
+                {isSellerPath ? null : <Navbar />}
+                {showUserLogin ? <Login /> : null}
 
             <Toaster />
 
@@ -74,6 +81,7 @@ const App = () => {
             </div>
             {!isSellerPath && <VoiceAssistant />}
             {!isSellerPath && <Footer />}
+            </div>
         </div>
     );
 };

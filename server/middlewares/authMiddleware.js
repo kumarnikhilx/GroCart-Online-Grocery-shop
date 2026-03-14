@@ -23,6 +23,16 @@ export const authenticate = asyncHandler(async (req, res, next) => {
         throw new CustomError(401, "Invalid or expired token");
     }
 
+    if (decodedToken.id === "seller_env_account") {
+        req.user = {
+            _id: "seller_env_account",
+            role: "seller",
+            email: process.env.SELLER_EMAIL,
+            name: "Admin Seller",
+        };
+        return next();
+    }
+
     const user = await User.findById(decodedToken.id).select("-password");
     if (!user) {
         return next(new CustomError(401, "User not found"));
